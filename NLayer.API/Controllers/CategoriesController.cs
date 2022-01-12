@@ -18,6 +18,7 @@ namespace NLayer.API.Controllers
         [HttpGet("[action]/{categoryId}")]
         public async Task<IActionResult> GetSingleCategoryByIdWithProducts(int categoryId)
         {
+            
             return CreateActionResult(await _categoryService.GetSingleCategoryByIdWithProductsAsync(categoryId));
           
         }
