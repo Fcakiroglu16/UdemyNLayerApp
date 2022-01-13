@@ -18,7 +18,7 @@ namespace NLayer.Service.Services
             _productRepository = productRepository;
         }
 
-        public async Task<CustomResponseDto<List<ProductWithCategoryDto>>> GetProductsWitCategory()
+        public async Task<CustomResponseDto<List<ProductWithCategoryDto>>> GetProductsWithCategory()
         {
             var products = await _productRepository.GetProductsWitCategory();
 
