@@ -33,7 +33,7 @@ namespace NLayer.Caching
 
             if(!_memoryCache.TryGetValue(CacheProductKey, out _))
             {
-                _memoryCache.Set(CacheProductKey, _repository.GetProductsWitCategory());
+                _memoryCache.Set(CacheProductKey, _repository.GetProductsWitCategory().Result);
             }
 
 
@@ -62,7 +62,9 @@ namespace NLayer.Caching
 
         public Task<IEnumerable<Product>> GetAllAsync()
         {
-          return Task.FromResult(_memoryCache.Get<IEnumerable<Product>>(CacheProductKey));
+
+            var products = _memoryCache.Get<IEnumerable<Product>>(CacheProductKey);
+          return Task.FromResult(products);
         }
 
         public Task<Product> GetByIdAsync(int id)
