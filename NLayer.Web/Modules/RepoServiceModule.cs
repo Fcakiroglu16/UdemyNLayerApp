@@ -11,7 +11,7 @@ using System.Reflection;
 using Module = Autofac.Module;
 namespace NLayer.Web.Modules
 {
-    public class RepoServiceModule:Module
+    public class RepoServiceModule : Module
     {
 
         protected override void Load(ContainerBuilder builder)
@@ -34,7 +34,7 @@ namespace NLayer.Web.Modules
             builder.RegisterAssemblyTypes(apiAssembly, repoAssembly, serviceAssembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerLifetimeScope();
 
 
-            
+
 
         }
     }

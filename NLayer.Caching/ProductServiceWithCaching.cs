@@ -7,12 +7,7 @@ using NLayer.Core.Repositories;
 using NLayer.Core.Services;
 using NLayer.Core.UnitOfWorks;
 using NLayer.Service.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NLayer.Caching
 {
@@ -31,7 +26,7 @@ namespace NLayer.Caching
             _memoryCache = memoryCache;
             _mapper = mapper;
 
-            if(!_memoryCache.TryGetValue(CacheProductKey, out _))
+            if (!_memoryCache.TryGetValue(CacheProductKey, out _))
             {
                 _memoryCache.Set(CacheProductKey, _repository.GetProductsWitCategory().Result);
             }
@@ -64,14 +59,14 @@ namespace NLayer.Caching
         {
 
             var products = _memoryCache.Get<IEnumerable<Product>>(CacheProductKey);
-          return Task.FromResult(products);
+            return Task.FromResult(products);
         }
 
         public Task<Product> GetByIdAsync(int id)
         {
             var product = _memoryCache.Get<List<Product>>(CacheProductKey).FirstOrDefault(x => x.Id == id);
 
-            if(product == null)
+            if (product == null)
             {
                 throw new NotFoundExcepiton($"{typeof(Product).Name}({id}) not found");
             }
@@ -79,7 +74,7 @@ namespace NLayer.Caching
             return Task.FromResult(product);
         }
 
-        public  Task<List<ProductWithCategoryDto>> GetProductsWitCategory()
+        public Task<List<ProductWithCategoryDto>> GetProductsWitCategory()
         {
             var products = _memoryCache.Get<IEnumerable<Product>>(CacheProductKey);
 

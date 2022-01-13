@@ -23,15 +23,15 @@ namespace NLayer.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-          
+
             return View(await _services.GetProductsWitCategory());
         }
 
         public async Task<IActionResult> Save()
         {
-            var categories = _categoryService.GetAllAsync();
+            var categories = await _categoryService.GetAllAsync();
 
-            var categoryiesDto = _mapper.Map<List<CategoryDto>>(categories);
+            var categoryiesDto = _mapper.Map<List<CategoryDto>>(categories.ToList());
 
             ViewBag.categories = new SelectList(categoryiesDto, "Id", "Name");
 
@@ -42,17 +42,17 @@ namespace NLayer.Web.Controllers
         public async Task<IActionResult> Save(ProductDto productDto)
 
         {
-         
 
-            if(ModelState.IsValid)
+
+            if (ModelState.IsValid)
             {
                 await _services.AddAsync(_mapper.Map<Product>(productDto));
                 return RedirectToAction(nameof(Index));
             }
 
-            var categories = _categoryService.GetAllAsync();
+            var categories = await _categoryService.GetAllAsync();
 
-            var categoryiesDto = _mapper.Map<List<CategoryDto>>(categories);
+            var categoryiesDto = _mapper.Map<List<CategoryDto>>(categories.ToList());
 
             ViewBag.categories = new SelectList(categoryiesDto, "Id", "Name");
             return View();

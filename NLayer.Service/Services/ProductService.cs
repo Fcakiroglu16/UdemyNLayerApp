@@ -4,11 +4,6 @@ using NLayer.Core.DTOs;
 using NLayer.Core.Repositories;
 using NLayer.Core.Services;
 using NLayer.Core.UnitOfWorks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NLayer.Service.Services
 {
@@ -26,8 +21,8 @@ namespace NLayer.Service.Services
         public async Task<List<ProductWithCategoryDto>> GetProductsWitCategory()
         {
             var products = await _productRepository.GetProductsWitCategory();
-           
-            var productsDto= _mapper.Map<List<ProductWithCategoryDto>>(products);
+
+            var productsDto = _mapper.Map<List<ProductWithCategoryDto>>(products);
             return productsDto;
 
         }
