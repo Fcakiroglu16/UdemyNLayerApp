@@ -14,6 +14,8 @@ namespace NLayer.Web.Controllers
         private readonly ProductApiService _productApiService;
         private readonly CategoryApiService _categoryApiService;
 
+        //newww
+
         public ProductsController(CategoryApiService categoryApiService, ProductApiService productApiService)
         {
             _categoryApiService = categoryApiService;
@@ -22,15 +24,12 @@ namespace NLayer.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-
             return View(await _productApiService.GetProductsWithCategoryAsync());
         }
 
         public async Task<IActionResult> Save()
         {
-            var categoriesDto = await _categoryApiService.GetAllAsync();
-
-           
+            var categoriesDto = await _categoryApiService.GetAllAsync();         
 
             ViewBag.categories = new SelectList(categoriesDto, "Id", "Name");
 
