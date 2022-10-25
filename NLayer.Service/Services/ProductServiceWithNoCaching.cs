@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using NLayer.Core;
 using NLayer.Core.DTOs;
 using NLayer.Core.Repositories;
@@ -12,24 +13,43 @@ using System.Threading.Tasks;
 
 namespace NLayer.Service.Services
 {
-    public class ProductServiceWithNoCaching : Service<Product>, IProductService
+    public class ProductServiceWithNoCaching : Service<Product, ProductDto>, IProductService
     {
         private readonly IProductRepository _productRepository;
-        private readonly IMapper _mapper;
 
-        public ProductServiceWithNoCaching(IGenericRepository<Product> repository, IUnitOfWork unitOfWork, IMapper mapper, IProductRepository productRepository) : base(repository, unitOfWork)
+        public ProductServiceWithNoCaching(IGenericRepository<Product> repository, IUnitOfWork unitOfWork, IMapper mapper, IProductRepository productRepository) : base(repository, unitOfWork, mapper)
         {
-            _mapper = mapper;
             _productRepository = productRepository;
+        }
+
+        public async Task<CustomResponseDto<ProductDto>> AddAsync(ProductCreateDto dto)
+        {
+            var entity = _mapper.Map<Product>(dto);
+
+            await _productRepository.AddAsync(entity);
+            await _unitOfWork.CommitAsync();
+
+            var newDto = _mapper.Map<ProductDto>(entity);
+            return CustomResponseDto<ProductDto>.Success(StatusCodes.Status201Created, newDto);
         }
 
         public async Task<CustomResponseDto<List<ProductWithCategoryDto>>> GetProductsWitCategory()
         {
             var products = await _productRepository.GetProductsWitCategory();
-           
-            var productsDto= _mapper.Map<List<ProductWithCategoryDto>>(products);
-            return CustomResponseDto<List<ProductWithCategoryDto>>.Success(200, productsDto);
 
+            var productsDto = _mapper.Map<List<ProductWithCategoryDto>>(products);
+            return CustomResponseDto<List<ProductWithCategoryDto>>.Success(200, productsDto);
+        }
+
+        public async Task<CustomResponseDto<NoContentDto>> UpdateAsync(ProductUpdateDto dto)
+        {
+            var entity = _mapper.Map<Product>(dto);
+
+            _productRepository.Update(entity);
+
+            await _unitOfWork.CommitAsync();
+
+            return CustomResponseDto<NoContentDto>.Success(StatusCodes.Status204NoContent);
         }
     }
 }

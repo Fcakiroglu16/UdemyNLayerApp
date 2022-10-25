@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLayer.Core.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -7,18 +8,24 @@ using System.Threading.Tasks;
 
 namespace NLayer.Core.Services
 {
-    public interface IService<T> where T : class
+    public interface IService<TEntity, TDto> where TDto : class where TEntity : BaseEntity
     {
-        Task<T> GetByIdAsync(int id);
-        Task<IEnumerable<T>> GetAllAsync();
-        IQueryable<T> Where(Expression<Func<T, bool>> expression);
-        Task<bool> AnyAsync(Expression<Func<T, bool>> expression);
-        Task<T> AddAsync(T entity);
-        Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
-        Task UpdateAsync(T entity);
-        Task RemoveAsync(T entity);
-        Task RemoveRangeAsync(IEnumerable<T> entities);
+        Task<CustomResponseDto<TDto>> GetByIdAsync(int id);
 
+        Task<CustomResponseDto<IEnumerable<TDto>>> GetAllAsync();
 
+        Task<CustomResponseDto<IEnumerable<TDto>>> Where(Expression<Func<TEntity, bool>> expression);
+
+        Task<CustomResponseDto<bool>> AnyAsync(Expression<Func<TEntity, bool>> expression);
+
+        Task<CustomResponseDto<TDto>> AddAsync(TDto dto);
+
+        Task<CustomResponseDto<IEnumerable<TDto>>> AddRangeAsync(IEnumerable<TDto> dto);
+
+        Task<CustomResponseDto<NoContentDto>> UpdateAsync(TDto dto);
+
+        Task<CustomResponseDto<NoContentDto>> RemoveAsync(int id);
+
+        Task<CustomResponseDto<NoContentDto>> RemoveRangeAsync(IEnumerable<int> ids);
     }
 }
